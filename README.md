@@ -42,6 +42,40 @@ they are not phoneme-level assessments. Speech recognition may require an
 internet connection and may send audio to the browser vendor's speech service.
 Progress is local to the current browser and device.
 
+## Enable the microphone
+
+The microphone is used for pronunciation checks in the practice sheet and the
+quiz. When you first tap 🎤, the browser asks for permission: choose **Allow**.
+If you previously blocked it, or the app shows "Microphone blocked", allow it
+in the browser, then in the operating system, and reload the page.
+
+### 1. Allow the page in the browser
+
+| Browser | Steps |
+|---|---|
+| Chrome (computer) | Click the icon left of the address bar > **Site settings** > **Microphone** > **Allow**. All sites: `chrome://settings/content/microphone`. |
+| Edge (computer) | Click the icon left of the address bar > **Permissions for this site** > **Microphone** > **Allow**. All sites: `edge://settings/content/microphone`. |
+| Safari (Mac) | **Safari** > **Settings** > **Websites** > **Microphone** > set this page to **Allow**. |
+| Chrome (Android) | Tap the icon left of the address bar > **Permissions** > **Microphone** > **Allow**. |
+| Safari (iPhone/iPad) | Tap **aA** in the address bar > **Website Settings** > **Microphone** > **Allow**. |
+
+### 2. Allow the browser in the operating system
+
+| System | Steps |
+|---|---|
+| macOS | **System Settings** > **Privacy & Security** > **Microphone** > turn on your browser. Restart the browser. |
+| Windows | **Settings** > **Privacy & security** > **Microphone** > turn on **Microphone access** and **Let desktop apps access your microphone**. |
+| Android | **Settings** > **Apps** > your browser > **Permissions** > **Microphone** > **Allow**. |
+| iPhone/iPad | **Settings** > **Apps** > **Safari** > **Microphone** > **Allow**. For Safari speech recognition, also turn on **Settings** > **General** > **Keyboard** > **Enable Dictation**. |
+
+### Still not working?
+
+- Use Chrome, Edge or Safari; Firefox has no speech recognition.
+- Close other apps using the microphone (video calls, recorders).
+- Speech recognition usually needs an internet connection.
+- Phones often block the microphone for downloaded HTML files. Open the trainer
+  from an HTTPS address instead.
+
 ## Project documents
 
 - [PDF phrasebook](./Danish_for_Handball_Samuel.pdf)
