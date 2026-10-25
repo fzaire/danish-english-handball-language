@@ -86,6 +86,7 @@ in the browser, then in the operating system, and reload the page.
 
 ## Project documents
 
+- [Phrasebook (Markdown)](./Danish_for_Handball_Samuel.md): readable directly on GitHub
 - [PDF phrasebook](./Danish_for_Handball_Samuel.pdf)
 - [Word phrasebook](./Danish_for_Handball_Samuel.docx)
 - [Product specification](./specification.md): roadmap for future development;

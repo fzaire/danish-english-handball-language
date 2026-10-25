@@ -26,6 +26,8 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Microphone setup guide in the README for each browser and operating system.
 - This changelog.
 - Contribution guide (`CONTRIBUTING.md`).
+- Markdown version of the phrasebook (`Danish_for_Handball_Samuel.md`),
+  readable directly on GitHub.
 
 ## [0.2.0] - 2026-10-25
 
