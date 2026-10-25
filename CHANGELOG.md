@@ -19,6 +19,8 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
+- Trainer: "Phrasebook" links to the HTML and PDF versions on GitHub Pages, shown on both the Learn and Quiz tabs.
+
 ### Added
 
 - Online version on GitHub Pages, served over HTTPS so the microphone works on
