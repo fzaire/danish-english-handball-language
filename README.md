@@ -6,6 +6,13 @@ sections, from coach shouts and positions to everyday conversation.
 
 ## Run
 
+**[Open Handball Dansk online](https://fzaire.github.io/danish-english-handball-language/)**
+(recommended, works on phones and computers). It is served over HTTPS, so the
+microphone and pronunciation checks work. On a phone, use **Add to Home Screen**
+to open it like an app.
+
+### Offline copy
+
 [Download the trainer HTML file directly](https://github.com/fzaire/danish-english-handball-language/releases/latest/download/danish-handball-trainer.html).
 This downloads the latest released trainer instead of displaying its source.
 Open the downloaded file in your browser. To choose where it is saved, enable
@@ -15,8 +22,8 @@ Download or clone this repository, then open
 [danish-handball-trainer.html](./danish-handball-trainer.html) in a browser.
 No build step, package installation, or backend is required.
 
-For hosted use, serve the file over HTTPS. Microphone access depends on browser
-permissions and may be restricted for local files or insecure HTTP pages.
+Microphone access may be blocked for downloaded files, especially on phones;
+use the online link for pronunciation checks.
 
 ## Features
 
@@ -73,8 +80,9 @@ in the browser, then in the operating system, and reload the page.
 - Use Chrome, Edge or Safari; Firefox has no speech recognition.
 - Close other apps using the microphone (video calls, recorders).
 - Speech recognition usually needs an internet connection.
-- Phones often block the microphone for downloaded HTML files. Open the trainer
-  from an HTTPS address instead.
+- Phones often block the microphone for downloaded HTML files. Use the
+  [online version](https://fzaire.github.io/danish-english-handball-language/)
+  instead.
 
 ## Project documents
 
