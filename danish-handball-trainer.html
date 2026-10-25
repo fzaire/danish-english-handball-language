@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#C8102E">
+<title>Handball Dansk</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#14213d;--mut:#667085;--line:#e1e5ee;--red:#c8102e;--navy:#1f3a5f;--ok:#17a05a;--warn:#d98a00;--bad:#d92d20;--chip:#eaeef6;--shadow:0 1px 2px rgba(20,33,61,.08)}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1320;--card:#172033;--ink:#eef2fb;--mut:#9aa6bd;--line:#26314a;--chip:#212c45;--navy:#9db7e8;--shadow:none}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+header{position:sticky;top:0;z-index:20;background:var(--red);color:#fff;padding:calc(env(safe-area-inset-top) + 10px) 16px 0}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:900px;margin:0 auto}
+.brand{font-weight:800;font-size:20px;letter-spacing:.2px}
+.brand small{display:block;font-weight:500;font-size:12px;opacity:.85}
+.stats{display:flex;gap:8px}
+.pill{background:rgba(255,255,255,.18);border-radius:999px;padding:5px 11px;font-weight:700;font-size:14px;white-space:nowrap}
+nav{display:flex;gap:4px;max-width:900px;margin:10px auto 0}
+nav button{flex:1;background:transparent;border:0;border-bottom:3px solid transparent;color:#fff;opacity:.8;padding:9px 4px;font-weight:700}
+nav button.on{opacity:1;border-color:#fff}
+main{max-width:900px;margin:0 auto;padding:14px 14px calc(env(safe-area-inset-bottom) + 40px)}
+.banner{background:#fff4e0;color:#6b4300;border:1px solid #f1d08a;border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:14px}
+@media(prefers-color-scheme:dark){.banner{background:#33270f;color:#f5d9a0;border-color:#5e4515}}
+.banner b{display:block;margin-bottom:2px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.bar input[type=search],.bar select{flex:1;min-width:150px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 12px;font:inherit}
+.seg{display:inline-flex;background:var(--chip);border-radius:12px;padding:3px}
+.seg button{border:0;background:transparent;padding:7px 12px;border-radius:9px;font-weight:600;font-size:14px}
+.seg button.on{background:var(--card);box-shadow:var(--shadow)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:8px 12px;text-align:left;min-width:118px}
+.chip.on{border-color:var(--red);box-shadow:0 0 0 2px rgba(200,16,46,.18)}
+.chip b{display:block;font-size:13px;white-space:nowrap}
+.chip i{display:block;height:5px;border-radius:5px;background:var(--chip);margin-top:6px;overflow:hidden}
+.chip i span{display:block;height:100%;background:var(--ok);width:0}
+.chip small{color:var(--mut);font-size:11px}
+details.tips{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin-bottom:12px}
+details.tips summary{font-weight:700;cursor:pointer}
+details.tips ul{margin:8px 0 2px;padding-left:20px;color:var(--mut);font-size:14px}
+details.tips li{margin:3px 0}
+.list{display:grid;gap:8px}
+.card{display:flex;align-items:stretch;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.card .main{flex:1;text-align:left;border:0;background:transparent;padding:12px 14px;min-width:0}
+.card .main:active{background:var(--chip)}
+.card.playing{border-color:var(--red)}
+.da{font-weight:800;font-size:18px;color:var(--navy);overflow-wrap:anywhere}
+.en{color:var(--mut);font-size:14px;margin-top:2px;overflow-wrap:anywhere}
+.acts{display:flex;align-items:center;gap:6px;padding:0 10px;border-left:1px solid var(--line)}
+.ib{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--chip);display:grid;place-items:center;font-size:18px}
+.ib:active{transform:scale(.94)}
+.ib.mic{background:var(--red);border-color:var(--red);color:#fff}
+.star{font-size:15px;min-width:18px;text-align:center}
+.empty{padding:30px;text-align:center;color:var(--mut)}
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(10,15,30,.55);z-index:40;display:none}
+.scrim.on{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--card);border-radius:22px 22px 0 0;max-width:640px;margin:0 auto;padding:18px 18px calc(env(safe-area-inset-bottom) + 18px);transform:translateY(105%);transition:transform .22s ease;max-height:92vh;overflow:auto;box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+.sheet.on{transform:none}
+.sheet h2{margin:0;font-size:24px;color:var(--navy);overflow-wrap:anywhere}
+.sheet .sub{color:var(--mut);margin:2px 0 12px}
+.row{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.btn{border:1px solid var(--line);background:var(--chip);border-radius:12px;padding:10px 14px;font-weight:700}
+.btn.pri{background:var(--red);border-color:var(--red);color:#fff}
+.big{width:84px;height:84px;border-radius:50%;border:0;background:var(--red);color:#fff;font-size:34px;display:grid;place-items:center;box-shadow:0 6px 18px rgba(200,16,46,.4)}
+.big.rec{animation:pulse 1.1s infinite;background:#a30d25}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(200,16,46,.6)}100%{box-shadow:0 0 0 22px rgba(200,16,46,0)}}
+.status{text-align:center;color:var(--mut);min-height:22px;font-size:14px}
+.result{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+.score{display:flex;align-items:center;gap:14px}
+.score .n{font-size:40px;font-weight:900;line-height:1}
+.meter{flex:1;height:10px;border-radius:10px;background:var(--chip);overflow:hidden}
+.meter span{display:block;height:100%;width:0;transition:width .4s}
+.verdict{font-weight:800;margin:8px 0 6px}
+.toks{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.tok{padding:4px 9px;border-radius:9px;font-weight:700;border:1px solid transparent}
+.tok.ok{background:rgba(23,160,90,.14);color:var(--ok);border-color:rgba(23,160,90,.4)}
+.tok.close{background:rgba(217,138,0,.14);color:var(--warn);border-color:rgba(217,138,0,.4)}
+.tok.bad{background:rgba(217,45,32,.12);color:var(--bad);border-color:rgba(217,45,32,.4)}
+.heard{color:var(--mut);font-size:14px}
+.heard b{color:var(--ink)}
+.hints{margin:8px 0 0;padding-left:20px;font-size:14px}
+.hints li{margin:4px 0}
+.fine{font-size:12px;color:var(--mut);margin-top:10px}
+label.sw{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--mut);justify-content:center}
+/* quiz */
+.q{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+.qprog{height:8px;border-radius:8px;background:var(--chip);overflow:hidden;margin-bottom:14px}
+.qprog span{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+.qspk{display:flex;justify-content:center;margin:6px 0 10px}
+.qspk .big{width:96px;height:96px;font-size:40px}
+.qda{text-align:center;font-size:22px;font-weight:800;color:var(--navy);min-height:30px;margin-bottom:12px}
+.opts{display:grid;gap:8px}
+.opt{border:2px solid var(--line);background:var(--card);border-radius:14px;padding:13px 14px;text-align:left;font-weight:600}
+.opt.right{border-color:var(--ok);background:rgba(23,160,90,.12)}
+.opt.wrong{border-color:var(--bad);background:rgba(217,45,32,.1)}
+.opt:disabled{cursor:default}
+.qfoot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px}
+.final{text-align:center;padding:10px}
+.final .n{font-size:54px;font-weight:900;color:var(--navy)}
+.hide{display:none!important}
+.foot{color:var(--mut);font-size:12px;margin-top:22px;text-align:center}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="brand">Handball Dansk<small>Tap to listen · record to get corrected</small></div>
+    <div class="stats"><span class="pill" id="streak">🔥 0</span><span class="pill" id="xp">⭐ 0 XP</span></div>
+  </div>
+  <nav>
+    <button id="tabLearn" class="on">Learn</button>
+    <button id="tabQuiz">Quiz</button>
+  </nav>
+</header>
+
+<main>
+  <div id="banners"></div>
+
+  <section id="learn">
+    <div class="bar">
+      <input type="search" id="q" placeholder="Search Danish or English…" autocomplete="off">
+      <div class="seg" id="speed"><button data-s="1" class="on">Normal</button><button data-s="0">Slow</button></div>
+      <select id="voiceSel" class="hide" aria-label="Danish voice"></select>
+    </div>
+    <div class="chips" id="chips"></div>
+    <details class="tips">
+      <summary>Pronunciation traps (read once)</summary>
+      <ul>
+        <li><b>Soft D</b>: a "d" after a vowel is a soft "th" as in "the": <i>med, rød, blad</i>.</li>
+        <li><b>æ, ø, å</b>: æ ≈ short "air", ø ≈ "uh" with rounded lips, å ≈ "aw".</li>
+        <li><b>Swallowed endings</b>: <i>-et</i> and <i>-ede</i> almost vanish: <i>spillede</i> ≈ "spell-uh".</li>
+        <li><b>Stød</b>: a throat catch that changes meaning (<i>hun</i> "she" vs <i>hund</i> "dog"). Learn by ear.</li>
+        <li><b>jeg</b> = "yai". <b>hv-</b> = "v". Final <b>g</b> is often silent.</li>
+        <li>Rhythm is flat and fast. Coaches use short fragments: master the shouts and positions first.</li>
+      </ul>
+    </details>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section id="quizView" class="hide">
+    <div class="bar">
+      <select id="quizScope" aria-label="Quiz scope"></select>
+      <label class="sw"><input type="checkbox" id="hideText"> Listening only (hide Danish)</label>
+    </div>
+    <div id="quizBody"></div>
+  </section>
+
+  <p class="foot">Pronunciation uses your device's Danish voice; correction compares what the speech recogniser heard with the target phrase.</p>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Pronunciation practice">
+  <h2 id="shDa"></h2>
+  <div class="sub" id="shEn"></div>
+  <div class="row">
+    <button class="btn" id="shPlay">🔊 Listen</button>
+    <button class="btn" id="shSlow">🐢 Slow</button>
+  </div>
+  <div class="row"><button class="big" id="shRec" aria-label="Record">🎤</button></div>
+  <div class="status" id="shStatus">Tap the microphone and say the phrase.</div>
+  <label class="sw"><input type="checkbox" id="keepAudio"> Also keep my recording to play back (may not work on all phones)</label>
+  <div class="result hide" id="shRes">
+    <div class="score"><div class="n" id="shScore">0</div><div class="meter"><span id="shMeter"></span></div></div>
+    <div class="verdict" id="shVerdict"></div>
+    <div class="toks" id="shToks"></div>
+    <div class="heard" id="shHeard"></div>
+    <ul class="hints" id="shHints"></ul>
+    <div class="row hide" id="shMine"><button class="btn" id="shPlayMine">▶ Hear yourself</button></div>
+  </div>
+  <div class="row"><button class="btn" id="shClose">Close</button></div>
+  <div class="fine">Scores come from the browser's Danish speech recogniser. If it understands you, a Dane will too; it is not a phoneme-level examiner.</div>
+</div>
+
+<script>
+/* ---------- DATA: [danish, english, optional spoken text] ---------- */
+const DATA=[
+{id:"shouts",t:"Coach shouts",rows:[
+["Hovedet op!","Heads up!"],["Kom nu!","Come on!"],["Sådan!","That's it!"],["Godt arbejde!","Good work!"],["Hold fast!","Hold on! / Stay focused!"],["Fokus!","Focus!"],["Tal sammen!","Talk to each other!"],["Kommuniker!","Communicate!"],["Mine! / Min bold!","Mine! / My ball!"],["Fri!","I'm open!"],["Her!","Here!"],["Ud!","Out! (move out)"],["Ind!","In!"],["Hurtigere!","Faster!"],["Rolig!","Calm down! / Easy!"],["Tid!","Time!"],["Skift!","Switch! / Sub!"],["Igen! / Én gang til!","Again! / One more time!"],["Op på tæerne!","Up on your toes! (be alert)"],["Flyt fødderne!","Move your feet!"],["Stå op!","Stand up / Stay big!"],["Hvorfor?","Why? (coach questioning a decision)"],["Lyt efter!","Listen!"],["Stop! / Frys!","Stop! / Freeze!"],["Samling!","Huddle!"]]},
+{id:"pos",t:"Positions & roles",rows:[
+["Målmand","Goalkeeper"],["Venstre fløj / Højre fløj","Left / Right wing"],["Venstre back / Højre back","Left / Right back"],["Playmaker / Midterback","Centre back"],["Streg / Stregspiller","Pivot / Line player"],["Bagspiller","Backcourt player"],["Kaptajn","Captain"],["Træner / Assistenttræner","Coach / Assistant coach"],["Holdkammerat","Teammate"],["Dommer","Referee"],["Sekretær / Tidtager","Table official / Timekeeper"]]},
+{id:"actions",t:"Game actions",rows:[
+["Bold","Ball"],["Aflevering / Aflever!","Pass / Pass it!"],["Skud / Skyd!","Shot / Shoot!"],["Mål!","Goal!"],["Redning","Save"],["Straffekast","7m penalty"],["Frikast","Free throw"],["Indkast","Throw-in (from sideline)"],["Udkast","Goalkeeper's throw-out"],["Kontra / Hurtigt angreb","Fast break"],["1. bølge / 2. bølge","First / second wave","første bølge / anden bølge"],["Gennembrud","Breakthrough"],["Spring skud","Jump shot"],["Finte / Lav en finte","Fake / Make a fake"],["Skærm / Sæt skærm","Screen / Set a screen"],["Skift / Kryds","Switch / Cross"],["Blok / Blokering","Block"],["Erobring","Steal / Ball win"],["Tabt bold","Turnover"],["Teknisk fejl","Technical fault"],["Skridt","Travelling (steps)"],["Dobbeltdribling","Double dribble"],["Fejl","Mistake / Foul"],["Passivt spil","Passive play"],["Forvarsel","Passive play warning"],["Overtal / Undertal","Power play / Short-handed"],["Syv mod seks","7v6 (empty goal)"],["Tomt mål","Empty net"],["Tilbage! / Hjem!","Get back! (defensive transition)"]]},
+{id:"tactics",t:"Systems & tactics",rows:[
+["Angreb / Forsvar","Attack / Defence"],["Opstilling","Formation / Set-up"],["6-0 (seks-nul)","6:0 defence","seks nul"],["5-1 (fem-et)","5:1 defence","fem et"],["3-2-1 (tre-to-en)","3:2:1 defence","tre to en"],["Mand-mand","Man-to-man"],["Offensivt / Defensivt","Aggressive / Passive (defence)"],["Dæk op / Dæk ud","Step up / Step out on the shooter"],["Luk hullet","Close the gap"],["Pres","Press"],["Hold afstand","Keep distance"],["Tag din mand","Take your man"],["Hjælp! / Hjælpeforsvar","Help! / Help defence"],["Spil på stregen","Play to the pivot"],["Spil ud på fløjen","Play out to the wing"],["Gå i dybden","Penetrate / Go deep"],["Vær tålmodig","Be patient"],["Hold bolden","Keep possession"],["Sæt tempoet op / ned","Raise / Lower the tempo"]]},
+{id:"rules",t:"Referee & rules",rows:[
+["Udvisning (2 min)","2-minute suspension","Udvisning"],["Gult kort","Yellow card"],["Rødt kort","Red card"],["Blåt kort","Blue card (report)"],["Time-out / Holdtimeout","Team time-out"],["Straffekast til ...","Penalty to ..."],["Offensiv fejl","Offensive foul"],["Overtrædelse","Violation"],["Udskiftning / Skiftezone","Substitution / Substitution area"],["Halvleg / Pause","Half / Half-time"],["Forlænget spilletid","Extra time"],["Slutresultat","Final score"]]},
+{id:"basics",t:"Survival essentials",rows:[
+["Hej / Hej hej","Hi / Bye"],["Godmorgen / Godaften / Godnat","Good morning / evening / night"],["Vi ses","See you"],["Tak / Mange tak","Thanks / Thanks a lot"],["Selv tak / Det var så lidt","You're welcome"],["Undskyld","Sorry / Excuse me"],["Ja / Nej / Måske","Yes / No / Maybe"],["Jeg hedder Samuel","My name is Samuel"],["Hvad hedder du?","What's your name?"],["Jeg forstår ikke","I don't understand"],["Kan du sige det igen?","Can you say that again?"],["Kan du tale langsommere?","Can you speak slower?"],["Hvad betyder det?","What does that mean?"],["Hvordan siger man ... på dansk?","How do you say ... in Danish?"],["Taler du engelsk?","Do you speak English?"],["Du må gerne tale dansk til mig","You may speak Danish to me"],["Jeg lærer dansk","I'm learning Danish"],["Hvor er ...?","Where is ...?"],["Hvornår? / Hvad tid?","When? / What time?"],["Hvordan går det? / Det går fint","How's it going? / Going well"],["Jeg er træt / sulten / tørstig","I'm tired / hungry / thirsty"],["Det er okay / Det er fint","It's fine"],["Pyt!","Never mind / shake it off"],["Held og lykke","Good luck"],["Tillykke","Congratulations"],["Godt gået! / Flot!","Well done! / Nice!"]]},
+{id:"nums",t:"Numbers & days",rows:[
+["en / et","1"],["to","2"],["tre","3"],["fire","4"],["fem","5"],["seks","6"],["syv","7"],["otte","8"],["ni","9"],["ti","10"],["elleve","11"],["tolv","12"],["tretten","13"],["fjorten","14"],["femten","15"],["seksten","16"],["sytten","17"],["atten","18"],["nitten","19"],["tyve","20"],
+["mandag / tirsdag / onsdag","Monday / Tuesday / Wednesday"],["torsdag / fredag","Thursday / Friday"],["lørdag / søndag","Saturday / Sunday"],["i dag / i morgen / i går","today / tomorrow / yesterday"],["i aften","tonight"]]},
+{id:"training",t:"Training",rows:[
+["Træning","Training"],["Opvarmning","Warm-up"],["Udstrækning / Stræk","Stretching"],["Styrketræning","Strength training"],["Løb / Løbetræning","Running / Conditioning"],["Skudtræning","Shooting drill"],["Øvelse","Drill"],["To og to / Par","In pairs"],["Stil jer op i en række","Line up"],["Hold A / Hold B","Team A / Team B"],["Veste","Bibs"],["Kegler","Cones"],["Bolde","Balls"],["Pause (2 min)","Break (2 min)","Pause"],["Vand","Water"],["Harpiks","Resin / Grip wax"],["Sidste gang","Last time / Last rep"],["Godt træningspas","Good session"]]},
+{id:"logistics",t:"Locker room & logistics",rows:[
+["Omklædningsrum","Changing room"],["Hal","Sports hall"],["Bad","Shower"],["Trøje","Jersey"],["Sko","Shoes"],["Taske","Bag"],["Kampdag","Match day"],["Hjemmekamp / Udekamp","Home / Away game"],["Mødetid","Meeting time"],["Afgang","Departure"],["Hvem kører?","Who's driving?"],["Har du en ekstra ...?","Do you have a spare ...?"],["Må jeg låne ...?","Can I borrow ...?"],["Hvornår er næste træning?","When is the next practice?"],["Jeg kommer for sent","I'll be late"],["Jeg kan ikke komme","I can't come"],["Jeg er syg","I'm sick"],["Hvor er toilettet?","Where's the toilet?"]]},
+{id:"injury",t:"Injuries & medical",rows:[
+["Jeg er skadet","I'm injured"],["Jeg har ondt i ...","I have pain in ..."],["Ankel / Knæ / Skulder","Ankle / Knee / Shoulder"],["Ryg / Lår / Læg","Back / Thigh / Calf"],["Finger / Hånd / Håndled","Finger / Hand / Wrist"],["Albue / Hoved / Nakke","Elbow / Head / Neck"],["Det gør ondt","It hurts"],["Jeg har brug for is","I need ice"],["Jeg skal til læge","I need to see a doctor"],["Jeg kan ikke spille","I can't play"],["Jeg kan godt spille","I can play"],["Fysioterapeut / Fysio","Physiotherapist"],["Forstuvet / Overstrakt / Brækket","Sprained / Strained / Broken"]]},
+{id:"social",t:"Social & team culture",rows:[
+["Hygge","Cosy, convivial togetherness"],["Skål!","Cheers!"],["Er du med?","Are you coming / in?"],["Skal vi ...?","Shall we ...?"],["Hvad skal vi lave?","What are we doing?"],["God kamp!","Good game!"],["Det var uheldigt","That was unlucky"],["Det var fortjent","That was deserved"],["Vi vandt / Vi tabte / Uafgjort","We won / We lost / Draw"],["Vi skal nok klare det","We'll manage"],["Det var en god kamp","That was a good game"],["Tak for kampen","Thanks for the game (to opponents)"],["Tak for i dag","Thanks for today"],["Jeg glæder mig til ...","I'm looking forward to ..."],["Lækkert / Fedt","Awesome / Cool"],["Det er sjovt","That's fun"],["Du er god","You're good"]]}
+];
+DATA.forEach(s=>{s.items=s.rows.map((r,i)=>({id:s.id+"-"+i,sec:s.id,da:r[0],en:r[1],say:r[2]||r[0]}))});
+const ALL=DATA.flatMap(s=>s.items);
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const store={get(k,d){try{const v=localStorage.getItem("dh_"+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("dh_"+k,JSON.stringify(v))}catch(e){}}};
+const S={xp:store.get("xp",0),streak:store.get("streak",0),last:store.get("last",""),best:store.get("best",{}),voice:store.get("voice",""),slow:false,sec:DATA[0].id,q:""};
+const today=()=>new Date().toISOString().slice(0,10);
+function touchDay(){const t=today();if(S.last===t)return;const y=new Date(Date.now()-864e5).toISOString().slice(0,10);S.streak=(S.last===y)?S.streak+1:1;S.last=t;store.set("streak",S.streak);store.set("last",S.last);paintStats()}
+function addXP(n){S.xp+=n;store.set("xp",S.xp);touchDay();paintStats()}
+function paintStats(){$("#xp").textContent="⭐ "+S.xp+" XP";$("#streak").textContent="🔥 "+S.streak}
+const toVariants=t=>t.split(/\s*\/\s*/).map(v=>v.replace(/\([^)]*\)/g,"").replace(/\.\.\./g,"").replace(/\s+([?!])/g,"$1").replace(/\s+/g," ").trim()).filter(Boolean);
+
+/* ---------- speech synthesis ---------- */
+const synth=window.speechSynthesis;
+let voices=[];
+function loadVoices(){
+  if(!synth)return;
+  voices=synth.getVoices().filter(v=>/^da([-_]|$)/i.test(v.lang));
+  const sel=$("#voiceSel");
+  if(voices.length>1){
+    sel.classList.remove("hide");
+    sel.innerHTML=voices.map(v=>`<option value="${v.voiceURI}">${v.name} (${v.lang})</option>`).join("");
+    sel.value=voices.find(v=>v.voiceURI===S.voice)?S.voice:voices[0].voiceURI;
+  }else sel.classList.add("hide");
+  paintBanners();
+}
+$("#voiceSel").onchange=e=>{S.voice=e.target.value;store.set("voice",S.voice)};
+function pickVoice(){return voices.find(v=>v.voiceURI===S.voice)||voices[0]||null}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+let speakToken=0;
+async function speak(text,opts={}){
+  if(!synth){return}
+  const my=++speakToken;
+  synth.cancel();
+  const parts=toVariants(text);
+  const rate=opts.slow??S.slow?0.62:0.92;
+  for(let i=0;i<parts.length;i++){
+    if(my!==speakToken)return;
+    await new Promise(res=>{
+      const u=new SpeechSynthesisUtterance(parts[i]);
+      u.lang="da-DK";const v=pickVoice();if(v)u.voice=v;
+      u.rate=rate;u.pitch=1;
+      u.onend=res;u.onerror=res;
+      synth.speak(u);
+    });
+    if(i<parts.length-1)await sleep(320);
+  }
+}
+function stopSpeak(){speakToken++;if(synth)synth.cancel()}
+
+/* ---------- banners ---------- */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function paintBanners(){
+  const b=[];
+  if(!synth)b.push(["No speech output","This browser cannot speak. Use Chrome, Edge or Safari."]);
+  else if(!voices.length)b.push(["No Danish voice detected","The page will still try da-DK, but quality depends on your device. Install one: iPhone/iPad: Settings > Accessibility > Spoken Content > Voices > Danish. Android: Settings > Text-to-speech > install Danish. Windows: Settings > Time & language > Speech > Add voices. macOS: System Settings > Accessibility > Spoken Content > System voice > Manage voices."]);
+  if(!SR)b.push(["Recording and correction unavailable","This browser has no speech recognition (Firefox). Use Chrome, Edge or Safari for the microphone feature."]);
+  if(location.protocol==="http:"&&location.hostname!=="localhost")b.push(["Microphone needs HTTPS","Host this file on an HTTPS address, or open it locally, or the browser will block the microphone."]);
+  $("#banners").innerHTML=b.map(x=>`<div class="banner"><b>${x[0]}</b>${x[1]}</div>`).join("");
+}
+
+/* ---------- learn view ---------- */
+function masteredCount(sec){return sec.items.filter(i=>(S.best[i.id]||0)>=80).length}
+function paintChips(){
+  $("#chips").innerHTML=DATA.map(s=>{const m=masteredCount(s),p=Math.round(m/s.items.length*100);
+    return `<button class="chip ${s.id===S.sec&&!S.q?"on":""}" data-id="${s.id}"><b>${s.t}</b><small>${m}/${s.items.length} mastered</small><i><span style="width:${p}%"></span></i></button>`}).join("");
+  document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{S.sec=c.dataset.id;S.q="";$("#q").value="";paintChips();paintList()});
+}
+function paintList(){
+  const q=S.q.trim().toLowerCase();
+  let items=q?ALL.filter(i=>(i.da+" "+i.en).toLowerCase().includes(q)):DATA.find(s=>s.id===S.sec).items;
+  const el=$("#list");
+  if(!items.length){el.innerHTML='<div class="empty">No match.</div>';return}
+  el.innerHTML=items.map(i=>{const b=S.best[i.id]||0;const st=b>=90?"🏆":b>=80?"⭐":b>0?"•":"";
+    return `<div class="card" data-id="${i.id}"><button class="main" data-play="${i.id}"><div class="da">${i.da}</div><div class="en">${i.en}</div></button><div class="acts"><span class="star" title="Best score ${b}">${st}</span><button class="ib" data-slow="${i.id}" aria-label="Slow">🐢</button><button class="ib mic" data-rec="${i.id}" aria-label="Practise">🎤</button></div></div>`}).join("");
+  el.querySelectorAll("[data-play]").forEach(b=>b.onclick=()=>play(b.dataset.play,false));
+  el.querySelectorAll("[data-slow]").forEach(b=>b.onclick=()=>play(b.dataset.slow,true));
+  el.querySelectorAll("[data-rec]").forEach(b=>b.onclick=()=>openSheet(b.dataset.rec));
+}
+const byId=id=>ALL.find(i=>i.id===id);
+async function play(id,slow){
+  const it=byId(id);const card=document.querySelector(`.card[data-id="${id}"]`);
+  if(card)card.classList.add("playing");
+  await speak(it.say,{slow:slow?true:S.slow});
+  if(card)card.classList.remove("playing");
+}
+$("#q").oninput=e=>{S.q=e.target.value;paintChips();paintList()};
+$("#speed").onclick=e=>{const b=e.target.closest("button");if(!b)return;S.slow=b.dataset.s==="0";document.querySelectorAll("#speed button").forEach(x=>x.classList.toggle("on",x===b))};
+
+/* ---------- scoring ---------- */
+const NUM={"0":"nul","1":"en","2":"to","3":"tre","4":"fire","5":"fem","6":"seks","7":"syv","8":"otte","9":"ni","10":"ti","11":"elleve","12":"tolv","13":"tretten","14":"fjorten","15":"femten","16":"seksten","17":"sytten","18":"atten","19":"nitten","20":"tyve"};
+function tokens(s){return s.toLowerCase().replace(/[.,!?;:"“”()]/g," ").replace(/[-–]/g," ").replace(/\s+/g," ").trim().split(" ").filter(Boolean).map(t=>NUM[t]||t)}
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=Array.from({length:n+1},(_,j)=>j);for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+const sim=(a,b)=>a===b?1:1-lev(a,b)/Math.max(a.length,b.length);
+function align(T,H){
+  const n=T.length,m=H.length,D=[],B=[];
+  for(let i=0;i<=n;i++){D.push(Array(m+1).fill(0));B.push(Array(m+1).fill(0))}
+  for(let i=1;i<=n;i++){D[i][0]=i;B[i][0]=1}
+  for(let j=1;j<=m;j++){D[0][j]=j*0.6;B[0][j]=2}
+  for(let i=1;i<=n;i++)for(let j=1;j<=m;j++){
+    const a=D[i-1][j-1]+(1-sim(T[i-1],H[j-1])),b=D[i-1][j]+1,c=D[i][j-1]+0.6;
+    const mn=Math.min(a,b,c);D[i][j]=mn;B[i][j]=mn===a?0:mn===b?1:2}
+  const res=[];let i=n,j=m,extra=0;
+  while(i>0||j>0){const k=B[i][j];
+    if(i>0&&j>0&&k===0){res.unshift({t:T[i-1],h:H[j-1],s:sim(T[i-1],H[j-1])});i--;j--}
+    else if(i>0&&(k===1||j===0)){res.unshift({t:T[i-1],h:null,s:0});i--}
+    else{extra++;j--}}
+  return {res,extra};
+}
+function scoreAgainst(targets,heard){
+  const H=tokens(heard);let best=null;
+  for(const t of targets){const T=tokens(t);if(!T.length)continue;
+    const {res,extra}=align(T,H);
+    const sc=Math.max(0,Math.round((res.reduce((a,r)=>a+r.s*r.s,0)/T.length*100)-extra*6));
+    if(!best||sc>best.score)best={score:sc,res,extra,target:t,heard}}
+  return best;
+}
+const TIPS=[
+ [t=>t==="jeg","\"jeg\" sounds like \"yai\"."],
+ [t=>/[aeiouyæøå]d($|e$|t$|s$)/.test(t),"Soft D: after a vowel the d is a soft \"th\" (like in \"the\"), not a hard d."],
+ [t=>/^hv/.test(t),"hv- is pronounced just \"v\"; the h is silent."],
+ [t=>/æ/.test(t),"æ is a short \"air\" (like in \"bed\" with the mouth a little more open)."],
+ [t=>/ø/.test(t),"ø: say \"uh\" with rounded lips."],
+ [t=>/å/.test(t),"å sounds like \"aw\"."],
+ [t=>/(ede|et)$/.test(t),"Word endings (-et, -ede) are swallowed; keep them very weak."],
+ [t=>/g$/.test(t),"A final g is often silent or a light \"w/y\" glide (dag ≈ \"da\")."],
+ [t=>/r/.test(t),"Danish r is soft, at the back of the throat, almost like a vowel."]
+];
+function hintsFor(res){
+  const out=[];
+  for(const r of res){if(r.s>=0.99)continue;
+    for(const [f,msg] of TIPS){if(f(r.t)&&!out.includes(msg)){out.push(`<b>${r.t}</b>: ${msg}`);break}}
+    if(out.length>=3)break}
+  return out;
+}
+
+/* ---------- practice sheet ---------- */
+let cur=null,rec=null,recording=false,mr=null,chunks=[],mineURL=null,micStream=null;
+function openSheet(id){
+  cur=byId(id);stopSpeak();
+  $("#shDa").textContent=cur.da;$("#shEn").textContent=cur.en;
+  $("#shRes").classList.add("hide");$("#shStatus").textContent=SR?"Tap the microphone and say the phrase.":"Speech recognition is not available in this browser.";
+  $("#scrim").classList.add("on");$("#sheet").classList.add("on");
+  speak(cur.say);
+}
+function closeSheet(){stopRec(true);stopSpeak();$("#scrim").classList.remove("on");$("#sheet").classList.remove("on");paintChips();paintList()}
+$("#shClose").onclick=closeSheet;$("#scrim").onclick=closeSheet;
+$("#shPlay").onclick=()=>speak(cur.say,{slow:false});
+$("#shSlow").onclick=()=>speak(cur.say,{slow:true});
+$("#shRec").onclick=()=>recording?stopRec(false):startRec();
+
+function setStatus(t){$("#shStatus").textContent=t}
+async function startRec(){
+  if(!SR){setStatus("This browser has no speech recognition. Try Chrome, Edge or Safari.");return}
+  stopSpeak();
+  if($("#keepAudio").checked){
+    try{micStream=await navigator.mediaDevices.getUserMedia({audio:true});mr=new MediaRecorder(micStream);chunks=[];mr.ondataavailable=e=>chunks.push(e.data);mr.start()}catch(e){mr=null}
+  }
+  rec=new SR();rec.lang="da-DK";rec.interimResults=false;rec.maxAlternatives=5;rec.continuous=false;
+  let got=false;
+  rec.onstart=()=>{recording=true;$("#shRec").classList.add("rec");setStatus("Listening… say it now")};
+  rec.onresult=e=>{got=true;const alts=[];for(const a of e.results[0])alts.push(a.transcript);evaluate(alts)};
+  rec.onerror=e=>{
+    const m={"not-allowed":"Microphone blocked. Allow microphone access for this page and try again.","service-not-allowed":"Speech service blocked by the browser or OS.","no-speech":"I heard nothing. Move closer and try again.","audio-capture":"No microphone found (or another app is using it).","language-not-supported":"This browser has no Danish recogniser.","network":"The speech service needs an internet connection."};
+    setStatus(m[e.error]||("Recognition error: "+e.error))};
+  rec.onend=()=>{recording=false;$("#shRec").classList.remove("rec");finishMine();if(!got&&$("#shStatus").textContent.startsWith("Listening"))setStatus("I heard nothing. Tap the microphone and try again.")};
+  try{rec.start()}catch(e){setStatus("Could not start the microphone.")}
+}
+function stopRec(silent){try{rec&&rec.stop()}catch(e){}if(silent){try{rec&&(rec.onresult=null)}catch(e){}}}
+function finishMine(){
+  try{if(mr&&mr.state!=="inactive"){mr.onstop=()=>{if(chunks.length){if(mineURL)URL.revokeObjectURL(mineURL);mineURL=URL.createObjectURL(new Blob(chunks,{type:mr.mimeType||"audio/webm"}));$("#shMine").classList.remove("hide")}};mr.stop()}}catch(e){}
+  try{micStream&&micStream.getTracks().forEach(t=>t.stop())}catch(e){}micStream=null;
+}
+$("#shPlayMine").onclick=()=>{if(mineURL){new Audio(mineURL).play()}};
+
+function evaluate(alts){
+  const targets=toVariants(cur.say);let best=null;
+  for(const a of alts){const r=scoreAgainst(targets,a);if(r&&(!best||r.score>best.score))best=r}
+  if(!best){setStatus("Could not evaluate. Try again.");return}
+  const sc=best.score;
+  const prev=S.best[cur.id]||0;
+  if(sc>prev){S.best[cur.id]=sc;store.set("best",S.best)}
+  addXP(sc>=80&&prev<80?10:sc>=50?3:1);
+  $("#shRes").classList.remove("hide");
+  $("#shMine").classList.toggle("hide",!mineURL||!$("#keepAudio").checked);
+  $("#shScore").textContent=sc;
+  const mt=$("#shMeter");mt.style.width=sc+"%";mt.style.background=sc>=80?"var(--ok)":sc>=50?"var(--warn)":"var(--bad)";
+  $("#shScore").style.color=sc>=80?"var(--ok)":sc>=50?"var(--warn)":"var(--bad)";
+  $("#shVerdict").textContent=sc>=90?"Perfekt! Sounds right to the recogniser.":sc>=80?"Flot! Very close.":sc>=50?"Næsten. A few sounds to fix.":"Prøv igen. Listen once more, then repeat slowly.";
+  $("#shToks").innerHTML=best.res.map(r=>`<span class="tok ${r.s>=0.99?"ok":r.s>=0.7?"close":"bad"}">${r.t}</span>`).join("");
+  $("#shHeard").innerHTML="I heard: <b>"+(best.heard||"…")+"</b>"+(best.target?" · target: <b>"+best.target+"</b>":"");
+  const h=hintsFor(best.res);
+  $("#shHints").innerHTML=sc>=90?"":h.map(x=>"<li>"+x+"</li>").join("");
+  setStatus(sc>=80?"Tap the microphone to try again, or close.":"Tap 🔊 to hear it, then record again.");
+}
+
+/* ---------- quiz ---------- */
+let Q=null;
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fillScope(){$("#quizScope").innerHTML='<option value="all">All sections</option>'+DATA.map(s=>`<option value="${s.id}">${s.t}</option>`).join("")}
+function startQuiz(){
+  const sc=$("#quizScope").value;const pool=sc==="all"?ALL:DATA.find(s=>s.id===sc).items;
+  Q={pool,qs:shuffle(pool).slice(0,Math.min(10,pool.length)),i:0,ok:0,done:false};
+  renderQ();
+}
+function renderQ(){
+  const el=$("#quizBody");
+  if(!Q){el.innerHTML='<div class="q final"><div class="da" style="font-size:22px">Listening quiz</div><p class="en">Hear a Danish phrase, pick its meaning. 10 questions, +5 XP each.</p><button class="btn pri" id="qStart">Start</button></div>';$("#qStart").onclick=startQuiz;return}
+  if(Q.i>=Q.qs.length){const pct=Math.round(Q.ok/Q.qs.length*100);addXP(Q.ok===Q.qs.length?10:0);
+    el.innerHTML=`<div class="q final"><div class="n">${Q.ok}/${Q.qs.length}</div><p>${pct>=90?"Fantastisk!":pct>=60?"Godt gået!":"Keep going, repeat the weak ones in Learn."}</p><button class="btn pri" id="qAgain">Play again</button></div>`;$("#qAgain").onclick=startQuiz;return}
+  const it=Q.qs[Q.i];
+  const wrong=shuffle(Q.pool.filter(x=>x.en!==it.en).map(x=>x.en).filter((v,k,a)=>a.indexOf(v)===k)).slice(0,3);
+  const opts=shuffle([it.en,...wrong]);
+  el.innerHTML=`<div class="q"><div class="qprog"><span style="width:${Q.i/Q.qs.length*100}%"></span></div>
+   <div class="qspk"><button class="big" id="qPlay" aria-label="Play">🔊</button></div>
+   <div class="qda">${$("#hideText").checked?"":it.da}</div>
+   <div class="opts">${opts.map(o=>`<button class="opt" data-o="${o.replace(/"/g,"&quot;")}">${o}</button>`).join("")}</div>
+   <div class="qfoot"><span class="en">Question ${Q.i+1} of ${Q.qs.length}</span><div><button class="btn" id="qSlow">🐢</button> <button class="btn pri hide" id="qNext">Next</button></div></div></div>`;
+  $("#qPlay").onclick=()=>speak(it.say,{slow:false});$("#qSlow").onclick=()=>speak(it.say,{slow:true});
+  el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    const right=b.dataset.o===it.en;
+    el.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(x.dataset.o===it.en)x.classList.add("right")});
+    if(!right)b.classList.add("wrong");else{Q.ok++;addXP(5)}
+    el.querySelector(".qda").textContent=it.da;$("#qNext").classList.remove("hide");
+  });
+  $("#qNext").onclick=()=>{Q.i++;renderQ()};
+  speak(it.say,{slow:false});
+}
+$("#quizScope").onchange=()=>{Q=null;renderQ()};
+$("#hideText").onchange=()=>{if(Q&&Q.i<Q.qs.length)renderQ()};
+
+/* ---------- tabs & init ---------- */
+function tab(which){
+  $("#tabLearn").classList.toggle("on",which==="learn");$("#tabQuiz").classList.toggle("on",which==="quiz");
+  $("#learn").classList.toggle("hide",which!=="learn");$("#quizView").classList.toggle("hide",which!=="quiz");
+  stopSpeak();if(which==="quiz"){fillScope();Q=null;renderQ()}
+}
+$("#tabLearn").onclick=()=>tab("learn");$("#tabQuiz").onclick=()=>tab("quiz");
+if(synth){loadVoices();synth.onvoiceschanged=loadVoices}
+paintStats();paintBanners();paintChips();paintList();
+</script>
+</body>
+</html>
