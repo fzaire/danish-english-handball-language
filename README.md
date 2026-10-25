@@ -93,4 +93,9 @@ in the browser, then in the operating system, and reload the page.
 - [Changelog](./CHANGELOG.md): release history. When contributing, add your
   user-visible changes to its **Unreleased** section.
 
+## Contributing
+
+Bug reports, phrase corrections from Danish speakers and improvements are
+welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
 Local memory databases are excluded from version control.
