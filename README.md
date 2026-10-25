@@ -24,7 +24,10 @@ permissions and may be restricted for local files or insecure HTTP pages.
 - Listen using your device's Danish voice at normal or slow speed.
 - Practise speaking with browser speech recognition and transcript-based scores.
 - Optionally record audio for playback during practice.
-- Take multiple-choice listening quizzes.
+- Take multiple-choice listening quizzes. Phrases with "/" alternatives become
+  separate questions, you can go back to earlier questions, and each answer is
+  followed by a required pronunciation recording before moving on (skipped
+  automatically when speech recognition or the microphone is unavailable).
 - Track XP, streaks, and best phrase scores in browser local storage.
 
 ## Browser requirements and limitations

@@ -100,6 +100,9 @@ label.sw{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--mut)
 .qfoot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:10px}
 .final{text-align:center;padding:10px}
 .final .n{font-size:54px;font-weight:900;color:var(--navy)}
+.btn:disabled,.big:disabled{opacity:.45;cursor:default;box-shadow:none}
+.qrec{border-top:1px solid var(--line);margin-top:14px;padding-top:6px}
+.qrec .result{margin-top:8px}
 .hide{display:none!important}
 .foot{color:var(--mut);font-size:12px;margin-top:22px;text-align:center}
 </style>
@@ -360,16 +363,36 @@ async function startRec(){
   if($("#keepAudio").checked){
     try{micStream=await navigator.mediaDevices.getUserMedia({audio:true});mr=new MediaRecorder(micStream);chunks=[];mr.ondataavailable=e=>chunks.push(e.data);mr.start()}catch(e){mr=null}
   }
+  recognize({
+    start:()=>{$("#shRec").classList.add("rec");setStatus("Listening… say it now")},
+    result:evaluate,
+    error:(code,msg)=>setStatus(msg),
+    end:got=>{$("#shRec").classList.remove("rec");finishMine();if(!got&&$("#shStatus").textContent.startsWith("Listening"))setStatus("I heard nothing. Tap the microphone and try again.")}
+  });
+}
+const REC_ERR={"not-allowed":"Microphone blocked. Allow microphone access for this page and try again.","service-not-allowed":"Speech service blocked by the browser or OS.","no-speech":"I heard nothing. Move closer and try again.","audio-capture":"No microphone found (or another app is using it).","language-not-supported":"This browser has no Danish recogniser.","network":"The speech service needs an internet connection."};
+// Errors that retrying cannot fix; the quiz lets the learner continue after these.
+const REC_HARD=["not-allowed","service-not-allowed","audio-capture","language-not-supported","network","start"];
+function recognize(h){
   rec=new SR();rec.lang="da-DK";rec.interimResults=false;rec.maxAlternatives=5;rec.continuous=false;
   let got=false;
-  rec.onstart=()=>{recording=true;$("#shRec").classList.add("rec");setStatus("Listening… say it now")};
-  rec.onresult=e=>{got=true;const alts=[];for(const a of e.results[0])alts.push(a.transcript);evaluate(alts)};
-  rec.onerror=e=>{
-    const m={"not-allowed":"Microphone blocked. Allow microphone access for this page and try again.","service-not-allowed":"Speech service blocked by the browser or OS.","no-speech":"I heard nothing. Move closer and try again.","audio-capture":"No microphone found (or another app is using it).","language-not-supported":"This browser has no Danish recogniser.","network":"The speech service needs an internet connection."};
-    setStatus(m[e.error]||("Recognition error: "+e.error))};
-  rec.onend=()=>{recording=false;$("#shRec").classList.remove("rec");finishMine();if(!got&&$("#shStatus").textContent.startsWith("Listening"))setStatus("I heard nothing. Tap the microphone and try again.")};
-  try{rec.start()}catch(e){setStatus("Could not start the microphone.")}
+  rec.onstart=()=>{recording=true;h.start()};
+  rec.onresult=e=>{if(got)return;got=true;const alts=[];for(const a of e.results[0])alts.push(a.transcript);h.result(alts)};
+  rec.onerror=e=>h.error(e.error,REC_ERR[e.error]||("Recognition error: "+e.error));
+  rec.onend=()=>{recording=false;h.end(got)};
+  try{rec.start()}catch(e){recording=false;h.error("start","Could not start the microphone.");h.end(false)}
 }
+function bestScore(say,alts){
+  const targets=toVariants(say);let best=null;
+  for(const a of alts){const r=scoreAgainst(targets,a);if(r&&(!best||r.score>best.score))best=r}
+  return best;
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const tone=sc=>sc>=80?"var(--ok)":sc>=50?"var(--warn)":"var(--bad)";
+const verdictText=sc=>sc>=90?"Perfekt! Sounds right to the recogniser.":sc>=80?"Flot! Very close.":sc>=50?"Næsten. A few sounds to fix.":"Prøv igen. Listen once more, then repeat slowly.";
+const toksHTML=b=>b.res.map(r=>`<span class="tok ${r.s>=0.99?"ok":r.s>=0.7?"close":"bad"}">${esc(r.t)}</span>`).join("");
+const heardHTML=b=>"I heard: <b>"+(b.heard?esc(b.heard):"…")+"</b>"+(b.target?" · target: <b>"+esc(b.target)+"</b>":"");
+const hintsHTML=b=>b.score>=90?"":hintsFor(b.res).map(x=>"<li>"+x+"</li>").join("");
 function stopRec(silent){try{rec&&rec.stop()}catch(e){}if(silent){try{rec&&(rec.onresult=null)}catch(e){}}}
 function finishMine(){
   try{if(mr&&mr.state!=="inactive"){mr.onstop=()=>{if(chunks.length){if(mineURL)URL.revokeObjectURL(mineURL);mineURL=URL.createObjectURL(new Blob(chunks,{type:mr.mimeType||"audio/webm"}));$("#shMine").classList.remove("hide")}};mr.stop()}}catch(e){}
@@ -378,8 +401,7 @@ function finishMine(){
 $("#shPlayMine").onclick=()=>{if(mineURL){new Audio(mineURL).play()}};
 
 function evaluate(alts){
-  const targets=toVariants(cur.say);let best=null;
-  for(const a of alts){const r=scoreAgainst(targets,a);if(r&&(!best||r.score>best.score))best=r}
+  const best=bestScore(cur.say,alts);
   if(!best){setStatus("Could not evaluate. Try again.");return}
   const sc=best.score;
   const prev=S.best[cur.id]||0;
@@ -388,13 +410,12 @@ function evaluate(alts){
   $("#shRes").classList.remove("hide");
   $("#shMine").classList.toggle("hide",!mineURL||!$("#keepAudio").checked);
   $("#shScore").textContent=sc;
-  const mt=$("#shMeter");mt.style.width=sc+"%";mt.style.background=sc>=80?"var(--ok)":sc>=50?"var(--warn)":"var(--bad)";
-  $("#shScore").style.color=sc>=80?"var(--ok)":sc>=50?"var(--warn)":"var(--bad)";
-  $("#shVerdict").textContent=sc>=90?"Perfekt! Sounds right to the recogniser.":sc>=80?"Flot! Very close.":sc>=50?"Næsten. A few sounds to fix.":"Prøv igen. Listen once more, then repeat slowly.";
-  $("#shToks").innerHTML=best.res.map(r=>`<span class="tok ${r.s>=0.99?"ok":r.s>=0.7?"close":"bad"}">${r.t}</span>`).join("");
-  $("#shHeard").innerHTML="I heard: <b>"+(best.heard||"…")+"</b>"+(best.target?" · target: <b>"+best.target+"</b>":"");
-  const h=hintsFor(best.res);
-  $("#shHints").innerHTML=sc>=90?"":h.map(x=>"<li>"+x+"</li>").join("");
+  const mt=$("#shMeter");mt.style.width=sc+"%";mt.style.background=tone(sc);
+  $("#shScore").style.color=tone(sc);
+  $("#shVerdict").textContent=verdictText(sc);
+  $("#shToks").innerHTML=toksHTML(best);
+  $("#shHeard").innerHTML=heardHTML(best);
+  $("#shHints").innerHTML=hintsHTML(best);
   setStatus(sc>=80?"Tap the microphone to try again, or close.":"Tap 🔊 to hear it, then record again.");
 }
 
@@ -402,33 +423,101 @@ function evaluate(alts){
 let Q=null;
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function fillScope(){$("#quizScope").innerHTML='<option value="all">All sections</option>'+DATA.map(s=>`<option value="${s.id}">${s.t}</option>`).join("")}
+// Explicit pairings for "/" alternatives whose English shares words across parts.
+const QSPLIT={
+ "Venstre fløj / Højre fløj":[["Venstre fløj","Left wing"],["Højre fløj","Right wing"]],
+ "Venstre back / Højre back":[["Venstre back","Left back"],["Højre back","Right back"]],
+ "1. bølge / 2. bølge":[["1. bølge","First wave","første bølge"],["2. bølge","Second wave","anden bølge"]],
+ "Offensivt / Defensivt":[["Offensivt","Aggressive (defence)"],["Defensivt","Passive (defence)"]],
+ "Dæk op / Dæk ud":[["Dæk op","Step up on the shooter"],["Dæk ud","Step out on the shooter"]],
+ "Sæt tempoet op / ned":[["Sæt tempoet op","Raise the tempo"],["Sæt tempoet ned","Lower the tempo"]],
+ "Godmorgen / Godaften / Godnat":[["Godmorgen","Good morning"],["Godaften","Good evening"],["Godnat","Good night"]],
+ "Jeg er træt / sulten / tørstig":[["Jeg er træt","I'm tired"],["Jeg er sulten","I'm hungry"],["Jeg er tørstig","I'm thirsty"]],
+ "Hjemmekamp / Udekamp":[["Hjemmekamp","Home game"],["Udekamp","Away game"]]
+};
+const splitSlash=t=>t.split(/\s*\/\s*/);
+function quizItems(it){
+  let parts=QSPLIT[it.da];
+  if(!parts){
+    const d=splitSlash(it.da);if(d.length<2)return [it];
+    const e=splitSlash(it.en),s=splitSlash(it.say);
+    parts=d.map((x,k)=>[x,e.length===d.length?e[k]:it.en,s.length===d.length?s[k]:x]);
+  }
+  return parts.map((p,k)=>({id:it.id+"."+k,sec:it.sec,da:p[0],en:p[1],say:p[2]||p[0],part:true}));
+}
 function startQuiz(){
-  const sc=$("#quizScope").value;const pool=sc==="all"?ALL:DATA.find(s=>s.id===sc).items;
-  Q={pool,qs:shuffle(pool).slice(0,Math.min(10,pool.length)),i:0,ok:0,done:false};
+  const sc=$("#quizScope").value;
+  const pool=(sc==="all"?ALL:DATA.find(s=>s.id===sc).items).flatMap(quizItems);
+  const qs=shuffle(pool).slice(0,Math.min(10,pool.length)).map(it=>{
+    const wrong=shuffle(pool.filter(x=>x.en!==it.en).map(x=>x.en).filter((v,k,a)=>a.indexOf(v)===k)).slice(0,3);
+    return {it,opts:shuffle([it.en,...wrong]),pick:null,pron:null,msg:"",blocked:false};
+  });
+  Q={qs,i:0,done:false};
   renderQ();
 }
+const canAdvance=q=>q.pick!=null&&(!!q.pron||q.blocked||!SR);
+function qStatusText(q){
+  if(q.msg)return q.msg;
+  if(!SR)return "Speech recognition is not available in this browser, so the pronunciation check is skipped.";
+  if(!q.pron)return "Now say it in Danish. Record to unlock Next.";
+  return q.pron.score>=80?"Tap Next, or record again.":"Tap 🔊 to hear it, then record again. Or tap Next.";
+}
 function renderQ(){
+  stopRec(true);
   const el=$("#quizBody");
-  if(!Q){el.innerHTML='<div class="q final"><div class="da" style="font-size:22px">Listening quiz</div><p class="en">Hear a Danish phrase, pick its meaning. 10 questions, +5 XP each.</p><button class="btn pri" id="qStart">Start</button></div>';$("#qStart").onclick=startQuiz;return}
-  if(Q.i>=Q.qs.length){const pct=Math.round(Q.ok/Q.qs.length*100);addXP(Q.ok===Q.qs.length?10:0);
-    el.innerHTML=`<div class="q final"><div class="n">${Q.ok}/${Q.qs.length}</div><p>${pct>=90?"Fantastisk!":pct>=60?"Godt gået!":"Keep going, repeat the weak ones in Learn."}</p><button class="btn pri" id="qAgain">Play again</button></div>`;$("#qAgain").onclick=startQuiz;return}
-  const it=Q.qs[Q.i];
-  const wrong=shuffle(Q.pool.filter(x=>x.en!==it.en).map(x=>x.en).filter((v,k,a)=>a.indexOf(v)===k)).slice(0,3);
-  const opts=shuffle([it.en,...wrong]);
+  if(!Q){el.innerHTML='<div class="q final"><div class="da" style="font-size:22px">Listening quiz</div><p class="en">Hear a Danish phrase, pick its meaning, then say it to check your pronunciation. 10 questions, +5 XP each.</p><button class="btn pri" id="qStart">Start</button></div>';$("#qStart").onclick=startQuiz;return}
+  if(Q.i>=Q.qs.length){
+    const n=Q.qs.length,ok=Q.qs.filter(q=>q.pick===q.it.en).length,pct=Math.round(ok/n*100);
+    const pr=Q.qs.filter(q=>q.pron),avg=pr.length?Math.round(pr.reduce((a,q)=>a+q.pron.score,0)/pr.length):null;
+    if(!Q.done){Q.done=true;if(ok===n)addXP(10)}
+    el.innerHTML=`<div class="q final"><div class="n">${ok}/${n}</div><p>${pct>=90?"Fantastisk!":pct>=60?"Godt gået!":"Keep going, repeat the weak ones in Learn."}</p>${avg==null?"":`<p class="en">Average pronunciation score: <b style="color:${tone(avg)}">${avg}</b></p>`}<div class="row"><button class="btn" id="qBack">◀ Back</button><button class="btn pri" id="qAgain">Play again</button></div></div>`;
+    $("#qBack").onclick=()=>{Q.i=n-1;renderQ()};$("#qAgain").onclick=startQuiz;return}
+  const q=Q.qs[Q.i],it=q.it,answered=q.pick!=null;
+  const cls=o=>"opt"+(answered&&o===it.en?" right":"")+(answered&&o===q.pick&&o!==it.en?" wrong":"");
   el.innerHTML=`<div class="q"><div class="qprog"><span style="width:${Q.i/Q.qs.length*100}%"></span></div>
    <div class="qspk"><button class="big" id="qPlay" aria-label="Play">🔊</button></div>
-   <div class="qda">${$("#hideText").checked?"":it.da}</div>
-   <div class="opts">${opts.map(o=>`<button class="opt" data-o="${o.replace(/"/g,"&quot;")}">${o}</button>`).join("")}</div>
-   <div class="qfoot"><span class="en">Question ${Q.i+1} of ${Q.qs.length}</span><div><button class="btn" id="qSlow">🐢</button> <button class="btn pri hide" id="qNext">Next</button></div></div></div>`;
+   <div class="qda">${answered||!$("#hideText").checked?esc(it.da):""}</div>
+   <div class="opts">${q.opts.map(o=>`<button class="${cls(o)}" data-o="${esc(o)}"${answered?" disabled":""}>${esc(o)}</button>`).join("")}</div>
+   <div class="qrec${answered?"":" hide"}">
+     <div class="row"><button class="big" id="qRec" aria-label="Record pronunciation"${SR?"":" disabled"}>🎤</button></div>
+     <div class="status" id="qStatus">${esc(qStatusText(q))}</div>
+     ${q.pron?`<div class="result"><div class="score"><div class="n" style="color:${tone(q.pron.score)}">${q.pron.score}</div><div class="meter"><span style="width:${q.pron.score}%;background:${tone(q.pron.score)}"></span></div></div><div class="verdict">${verdictText(q.pron.score)}</div><div class="toks">${toksHTML(q.pron)}</div><div class="heard">${heardHTML(q.pron)}</div><ul class="hints">${hintsHTML(q.pron)}</ul></div>`:""}
+   </div>
+   <div class="qfoot"><button class="btn" id="qBack"${Q.i===0?" disabled":""}>◀ Back</button><span class="en">Question ${Q.i+1} of ${Q.qs.length}</span><div><button class="btn" id="qSlow">🐢</button> <button class="btn pri${answered?"":" hide"}" id="qNext"${canAdvance(q)?"":" disabled"}>Next ▶</button></div></div></div>`;
   $("#qPlay").onclick=()=>speak(it.say,{slow:false});$("#qSlow").onclick=()=>speak(it.say,{slow:true});
   el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
-    const right=b.dataset.o===it.en;
-    el.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(x.dataset.o===it.en)x.classList.add("right")});
-    if(!right)b.classList.add("wrong");else{Q.ok++;addXP(5)}
-    el.querySelector(".qda").textContent=it.da;$("#qNext").classList.remove("hide");
+    if(q.pick!=null)return;
+    q.pick=b.dataset.o;if(q.pick===it.en)addXP(5);
+    renderQ();speak(it.say,{slow:false});
   });
-  $("#qNext").onclick=()=>{Q.i++;renderQ()};
-  speak(it.say,{slow:false});
+  $("#qRec").onclick=()=>quizRec(q);
+  $("#qBack").onclick=()=>{if(Q.i>0){Q.i--;renderQ()}};
+  $("#qNext").onclick=()=>{if(canAdvance(q)){Q.i++;renderQ()}};
+  if(!answered)speak(it.say,{slow:false});
+}
+function quizRec(q){
+  if(recording){stopRec(false);return}
+  if(!SR)return;
+  stopSpeak();
+  const live=()=>Q&&Q.qs[Q.i]===q;
+  const status=t=>{if(live())$("#qStatus").textContent=t};
+  recognize({
+    start:()=>{if(live())$("#qRec").classList.add("rec");status("Listening… say it now")},
+    result:alts=>{
+      const b=bestScore(q.it.say,alts);
+      if(!b){status("Could not evaluate. Try again.");return}
+      const prev=q.pron?q.pron.score:0;
+      addXP(b.score>=80&&prev<80?10:b.score>=50?3:1);
+      if(!q.it.part&&b.score>(S.best[q.it.id]||0)){S.best[q.it.id]=b.score;store.set("best",S.best)}
+      q.pron=b;q.msg="";
+      if(live())renderQ();
+    },
+    error:(code,msg)=>{
+      if(REC_HARD.includes(code)){q.blocked=true;q.msg=msg+" You can continue without the check.";if(live())renderQ()}
+      else status(msg);
+    },
+    end:got=>{if(!live())return;$("#qRec").classList.remove("rec");if(!got&&$("#qStatus").textContent.startsWith("Listening"))status("I heard nothing. Tap the microphone and try again.")}
+  });
 }
 $("#quizScope").onchange=()=>{Q=null;renderQ()};
 $("#hideText").onchange=()=>{if(Q&&Q.i<Q.qs.length)renderQ()};
@@ -437,7 +526,7 @@ $("#hideText").onchange=()=>{if(Q&&Q.i<Q.qs.length)renderQ()};
 function tab(which){
   $("#tabLearn").classList.toggle("on",which==="learn");$("#tabQuiz").classList.toggle("on",which==="quiz");
   $("#learn").classList.toggle("hide",which!=="learn");$("#quizView").classList.toggle("hide",which!=="quiz");
-  stopSpeak();if(which==="quiz"){fillScope();Q=null;renderQ()}
+  stopRec(true);stopSpeak();if(which==="quiz"){fillScope();Q=null;renderQ()}
 }
 $("#tabLearn").onclick=()=>tab("learn");$("#tabQuiz").onclick=()=>tab("quiz");
 if(synth){loadVoices();synth.onvoiceschanged=loadVoices}
