@@ -6,6 +6,9 @@ sections, from coach shouts and positions to everyday conversation.
 
 ## Run
 
+[Download the trainer HTML file directly](https://github.com/fzaire/danish-english-handball-language/raw/refs/heads/main/danish-handball-trainer.html).
+Save the file, then open it in your browser.
+
 Download or clone this repository, then open
 [danish-handball-trainer.html](./danish-handball-trainer.html) in a browser.
 No build step, package installation, or backend is required.
