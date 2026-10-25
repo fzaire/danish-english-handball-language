@@ -1,0 +1,79 @@
+name: Feature (from an accepted idea)
+description: A specified, testable feature ready to be built. New ideas go to Discussions → Ideas first.
+title: "Feature: "
+labels: ["feature", "status:needs-spec"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this only for ideas accepted in triage. **New idea?** Post it in
+        [Discussions → Ideas](https://github.com/fzaire/danish-english-handball-language/discussions/new?category=ideas) so people can vote.
+  - type: input
+    id: idea
+    attributes:
+      label: Source idea
+      description: Link to the Ideas discussion, and its vote count at triage.
+      placeholder: "https://github.com/fzaire/danish-english-handball-language/discussions/123 (⬆️ 7)"
+    validations:
+      required: true
+  - type: textarea
+    id: story
+    attributes:
+      label: User story
+      value: "As a <player/coach/parent>, I want <capability>, so that <benefit>."
+    validations:
+      required: true
+  - type: textarea
+    id: scenarios
+    attributes:
+      label: Acceptance scenarios (Given / When / Then)
+      description: |
+        At least 3: the main case, an edge case, and a failure / unsupported case.
+        Each scenario becomes an automated test.
+      value: |
+        - [ ] **Scenario 1 – main case**
+          Given …
+          When …
+          Then …
+        - [ ] **Scenario 2 – edge case**
+          Given …
+          When …
+          Then …
+        - [ ] **Scenario 3 – failure / unsupported**
+          Given …
+          When …
+          Then …
+    validations:
+      required: true
+  - type: textarea
+    id: out
+    attributes:
+      label: Out of scope
+      placeholder: What this feature deliberately does NOT do.
+  - type: dropdown
+    id: size
+    attributes:
+      label: Size estimate
+      options:
+        - "S – under ~2 hours"
+        - "M – half a day to a day"
+        - "L – more than a day (consider splitting)"
+    validations:
+      required: true
+  - type: checkboxes
+    id: dor
+    attributes:
+      label: Definition of Ready
+      options:
+        - label: Problem and user story are clear
+          required: true
+        - label: At least 3 Given/When/Then scenarios
+          required: true
+        - label: Out of scope stated
+        - label: Size agreed
+          required: true
+  - type: markdown
+    attributes:
+      value: |
+        **Definition of Done** (checked in the pull request): every scenario passes as a test,
+        works offline and on phones, CHANGELOG updated, docs updated if needed, idea discussion told "shipped in vX.Y.Z".

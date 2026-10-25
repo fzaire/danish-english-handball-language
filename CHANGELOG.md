@@ -19,8 +19,6 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
-- Trainer: "Phrasebook" links to the HTML and PDF versions on GitHub Pages, shown on both the Learn and Quiz tabs.
-
 ### Added
 
 - Online version on GitHub Pages, served over HTTPS so the microphone works on
@@ -34,6 +32,11 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   phrasebook as HTML and PDF into `docs/`.
 - Favicon and home-screen icon (red Danish cross with a handball) for the
   trainer, the online site and the generated phrasebook.
+- Trainer: links to the phrasebook (HTML and PDF) and a **💡 Suggest an idea**
+  link, on both the Learn and Quiz tabs.
+- Idea → feature process: ideas and upvotes in GitHub Discussions, Feature and
+  Bug issue forms with Given/When/Then scenarios, pull request checklist,
+  labels, roadmap board, and a how-to guide (`FEATURE_WORKFLOW.md`).
 
 ## [0.2.0] - 2026-10-25
 

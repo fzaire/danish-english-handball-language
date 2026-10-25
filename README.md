@@ -102,4 +102,8 @@ in the browser, then in the operating system, and reload the page.
 Bug reports, phrase corrections from Danish speakers and improvements are
 welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
+Have an idea? Post it in [Discussions → Ideas](https://github.com/fzaire/danish-english-handball-language/discussions/categories/ideas)
+and upvote the ones you like. [FEATURE_WORKFLOW.md](./FEATURE_WORKFLOW.md)
+explains how ideas are chosen, specified and built.
+
 Local memory databases are excluded from version control.

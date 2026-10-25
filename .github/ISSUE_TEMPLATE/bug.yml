@@ -1,0 +1,42 @@
+name: Bug report
+description: Something doesn't work as expected.
+title: "Bug: "
+labels: ["bug", "status:triage"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: And what did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the trainer
+        2. Go to Quiz
+        3. …
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: How do you run the app?
+      options:
+        - GitHub Pages (online link)
+        - Downloaded HTML file
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Device and browser
+      placeholder: "iPhone 13, Safari 18 / Windows 11, Chrome 130"
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or console errors (optional)

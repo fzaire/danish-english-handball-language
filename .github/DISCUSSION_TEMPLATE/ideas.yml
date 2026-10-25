@@ -1,0 +1,53 @@
+title: "Idea: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting something! 💡
+        **Describe the problem, not only the solution** — it helps us merge similar ideas.
+        Others can vote with the ⬆️ button. Please upvote instead of commenting "+1".
+        See [FEATURE_WORKFLOW.md](https://github.com/fzaire/danish-english-handball-language/blob/main/FEATURE_WORKFLOW.md) for what happens next.
+  - type: dropdown
+    id: who
+    attributes:
+      label: I am a…
+      options:
+        - Player
+        - Coach
+        - Parent
+        - Teacher
+        - Contributor / developer
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is hard, missing or annoying today?
+      placeholder: "As a player, I can't … so …"
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it matters
+      description: Who benefits, and how often would it be used?
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Rough suggestion (optional)
+      description: How might it work? Sketches and screenshots welcome.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Learn (phrase list, listening)
+        - Pronunciation / recording
+        - Quiz
+        - Phrasebook (HTML/PDF)
+        - Vocabulary content
+        - Other

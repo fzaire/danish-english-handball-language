@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💡 Suggest an idea (and vote on others)
+    url: https://github.com/fzaire/danish-english-handball-language/discussions/categories/ideas
+    about: New ideas start here so everyone can upvote them. Accepted ideas become Feature issues.
+  - name: ❓ Ask a question
+    url: https://github.com/fzaire/danish-english-handball-language/discussions/categories/q-a
+    about: Help with using the trainer or the phrasebook.
