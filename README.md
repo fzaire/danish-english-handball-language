@@ -90,9 +90,9 @@ in the browser, then in the operating system, and reload the page.
   Generated [web page](https://fzaire.github.io/danish-english-handball-language/docs/Danish_english_vocabulary_for_Handball.html)
   and [PDF](https://fzaire.github.io/danish-english-handball-language/docs/Danish_english_vocabulary_for_Handball.pdf)
   are built into [docs/](./docs) by `scripts/build-docs.sh`.
-- [Original PDF phrasebook](./Danish_for_Handball_Samuel.pdf)
-- [Original Word phrasebook](./Danish_for_Handball_Samuel.docx)
-- [Product specification](./specification.md): roadmap for future development;
+- [Original PDF phrasebook](./docs/Danish_for_Handball_Samuel.pdf)
+- [Original Word phrasebook](./docs/Danish_for_Handball_Samuel.docx)
+- [Product specification](./specs/specification.md): roadmap for future development;
   features described there are not all implemented in the current trainer.
 - [Changelog](./CHANGELOG.md): release history. When contributing, add your
   user-visible changes to its **Unreleased** section.
@@ -103,7 +103,7 @@ Bug reports, phrase corrections from Danish speakers and improvements are
 welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 Have an idea? Post it in [Discussions → Ideas](https://github.com/fzaire/danish-english-handball-language/discussions/categories/ideas)
-and upvote the ones you like. [FEATURE_WORKFLOW.md](./FEATURE_WORKFLOW.md)
+and upvote the ones you like. [FEATURE_WORKFLOW.md](./specs/FEATURE_WORKFLOW.md)
 explains how ideas are chosen, specified and built.
 
 Local memory databases are excluded from version control.

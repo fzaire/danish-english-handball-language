@@ -23,7 +23,7 @@ particularly welcome to review phrases.
 - **New feature ideas** go to [Discussions → Ideas](https://github.com/fzaire/danish-english-handball-language/discussions/categories/ideas),
   where everyone can upvote them. Accepted ideas become Feature issues with
   Given/When/Then acceptance scenarios. The full process is described in
-  [FEATURE_WORKFLOW.md](./FEATURE_WORKFLOW.md).
+  [FEATURE_WORKFLOW.md](./specs/FEATURE_WORKFLOW.md).
 - Pick work from issues labelled [`status:ready`](https://github.com/fzaire/danish-english-handball-language/issues?q=is%3Aopen+label%3Astatus%3Aready).
 - Small fixes (typos, a wrong translation) can go straight to a pull request.
 

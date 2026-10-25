@@ -36,7 +36,7 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   link, on both the Learn and Quiz tabs.
 - Idea → feature process: ideas and upvotes in GitHub Discussions, Feature and
   Bug issue forms with Given/When/Then scenarios, pull request checklist,
-  labels, roadmap board, and a how-to guide (`FEATURE_WORKFLOW.md`).
+  labels, roadmap board, and a how-to guide (`specs/FEATURE_WORKFLOW.md`).
 
 ## [0.2.0] - 2026-10-25
 

@@ -71,7 +71,7 @@ If a second maintainer joins, add them as a repository collaborator
 | Ready to build | [status:ready](https://github.com/fzaire/danish-english-handball-language/issues?q=is%3Aopen+label%3Astatus%3Aready) |
 | Board | [Projects](https://github.com/fzaire/danish-english-handball-language/projects) → **Handball Dansk roadmap** |
 | Next release | [Milestones](https://github.com/fzaire/danish-english-handball-language/milestones) |
-| Templates (source) | [`.github/DISCUSSION_TEMPLATE/`](./.github/DISCUSSION_TEMPLATE/), [`.github/ISSUE_TEMPLATE/`](./.github/ISSUE_TEMPLATE/), [`.github/pull_request_template.md`](./.github/pull_request_template.md) |
+| Templates (source) | [`.github/DISCUSSION_TEMPLATE/`](../.github/DISCUSSION_TEMPLATE/), [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/), [`.github/pull_request_template.md`](../.github/pull_request_template.md) |
 
 The trainer app also has a **💡 Suggest an idea** link at the bottom of the
 page, which opens a new idea form directly.
@@ -209,7 +209,7 @@ A feature can be built when:
 1. Assign yourself to the issue and change its label to `status:in-progress`.
 2. Create a branch named after the issue: `feature/<issue-number>-<short-name>`,
    for example `feature/12-streak-reminder`.
-3. Implement the feature. Follow [CONTRIBUTING.md](./CONTRIBUTING.md) for code
+3. Implement the feature. Follow [CONTRIBUTING.md](../CONTRIBUTING.md) for code
    style and local testing.
 4. **Turn every scenario into a test.** For this app that is a scripted
    browser check (Playwright) or, at minimum, a manual check written down in
@@ -230,7 +230,7 @@ A feature can be built when:
 
 When the milestone's issues are all closed:
 
-1. Follow the release steps in [CHANGELOG.md](./CHANGELOG.md) (rename
+1. Follow the release steps in [CHANGELOG.md](../CHANGELOG.md) (rename
    **Unreleased** to the version, then create the GitHub release with
    `danish-handball-trainer.html` attached).
 2. Close the milestone.
@@ -348,9 +348,9 @@ or set it up again (for example on a fork).
 | Piece | Where to configure | Notes |
 |---|---|---|
 | Discussions | **Settings → General → Features → Discussions** | The default **Ideas** category is used. It has upvotes enabled by default. |
-| Idea form | [`.github/DISCUSSION_TEMPLATE/ideas.yml`](./.github/DISCUSSION_TEMPLATE/ideas.yml) | File name must match the category slug (`ideas`). |
-| Issue forms | [`.github/ISSUE_TEMPLATE/`](./.github/ISSUE_TEMPLATE/) | `feature.yml`, `bug.yml`; `config.yml` disables blank issues and points to Ideas and Q&A. |
-| Pull request template | [`.github/pull_request_template.md`](./.github/pull_request_template.md) | Scenario checklist and Definition of Done. |
+| Idea form | [`.github/DISCUSSION_TEMPLATE/ideas.yml`](../.github/DISCUSSION_TEMPLATE/ideas.yml) | File name must match the category slug (`ideas`). |
+| Issue forms | [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) | `feature.yml`, `bug.yml`; `config.yml` disables blank issues and points to Ideas and Q&A. |
+| Pull request template | [`.github/pull_request_template.md`](../.github/pull_request_template.md) | Scenario checklist and Definition of Done. |
 | Labels | **Issues → Labels** | Recreate with `gh label create <name> --color <hex> --description <text> --force`. |
 | Milestones | **Issues → Milestones** | One per release, named like the tag (`v0.3.0`). |
 | Board | **Projects → Handball Dansk roadmap** | Board layout grouped by **Status**. In the project's **Workflows**, turn on *Auto-add to project* with the filter `is:issue label:feature,bug` and *Item closed → Done*. Creating or editing projects with `gh` needs the `project` scope (`gh auth refresh -s project`; remove it afterwards with `-r project`). |
@@ -358,7 +358,7 @@ or set it up again (for example on a fork).
 
 **Permissions:** labels, milestones and templates work with the default `gh`
 scopes (`repo`). Changing files under `.github/workflows/` needs the
-`workflow` scope temporarily; see [CONTRIBUTING.md](./CONTRIBUTING.md).
+`workflow` scope temporarily; see [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ### Moving to GitLab
 
@@ -386,7 +386,7 @@ server"). Votes guide, they do not decide.
 with its own scenarios, that each deliver something useful on their own.
 
 **Where do phrase corrections go?** Small corrections skip this process: open
-a pull request or a bug issue directly (see [CONTRIBUTING.md](./CONTRIBUTING.md#suggesting-or-correcting-phrases)).
+a pull request or a bug issue directly (see [CONTRIBUTING.md](../CONTRIBUTING.md#suggesting-or-correcting-phrases)).
 New *sets* of phrases (for example a new section) go through Ideas.
 
 **Can bugs be voted on?** Bugs are not voted on; they are fixed by severity.

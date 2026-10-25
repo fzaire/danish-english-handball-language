@@ -6,7 +6,7 @@ body:
         Thanks for suggesting something! 💡
         **Describe the problem, not only the solution** — it helps us merge similar ideas.
         Others can vote with the ⬆️ button. Please upvote instead of commenting "+1".
-        See [FEATURE_WORKFLOW.md](https://github.com/fzaire/danish-english-handball-language/blob/main/FEATURE_WORKFLOW.md) for what happens next.
+        See [FEATURE_WORKFLOW.md](https://github.com/fzaire/danish-english-handball-language/blob/main/specs/FEATURE_WORKFLOW.md) for what happens next.
   - type: dropdown
     id: who
     attributes:
