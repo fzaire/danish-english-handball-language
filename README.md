@@ -90,5 +90,7 @@ in the browser, then in the operating system, and reload the page.
 - [Word phrasebook](./Danish_for_Handball_Samuel.docx)
 - [Product specification](./specification.md): roadmap for future development;
   features described there are not all implemented in the current trainer.
+- [Changelog](./CHANGELOG.md): release history. When contributing, add your
+  user-visible changes to its **Unreleased** section.
 
 Local memory databases are excluded from version control.
