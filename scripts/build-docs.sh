@@ -9,6 +9,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT="$ROOT/docs"
 CSS="$ROOT/scripts/docs.css"
+HEAD="$ROOT/scripts/docs-head.html"
 DEFAULT_SOURCES=("Danish_english_vocabulary_for_Handball.md")
 
 fail() { echo "error: $*" >&2; exit 1; }
@@ -48,6 +49,7 @@ for src in "${SOURCES[@]}"; do
   pandoc "$src" \
     --from gfm --to html5 --standalone --embed-resources \
     --css "$CSS" \
+    --include-in-header "$HEAD" \
     --metadata pagetitle="$title" \
     --metadata lang=en \
     --output "$html"

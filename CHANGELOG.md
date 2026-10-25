@@ -30,6 +30,8 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   readable directly on GitHub.
 - `scripts/build-docs.sh` and a GitHub Actions workflow that build the
   phrasebook as HTML and PDF into `docs/`.
+- Favicon and home-screen icon (red Danish cross with a handball) for the
+  trainer, the online site and the generated phrasebook.
 
 ## [0.2.0] - 2026-10-25
 

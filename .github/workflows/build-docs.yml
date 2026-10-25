@@ -7,12 +7,14 @@ on:
       - "*.md"
       - "scripts/build-docs.sh"
       - "scripts/docs.css"
+      - "scripts/docs-head.html"
       - ".github/workflows/build-docs.yml"
   pull_request:
     paths:
       - "*.md"
       - "scripts/build-docs.sh"
       - "scripts/docs.css"
+      - "scripts/docs-head.html"
       - ".github/workflows/build-docs.yml"
   workflow_dispatch:
 
