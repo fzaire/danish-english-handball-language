@@ -1,0 +1,60 @@
+name: Build docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "*.md"
+      - "scripts/build-docs.sh"
+      - "scripts/docs.css"
+      - ".github/workflows/build-docs.yml"
+  pull_request:
+    paths:
+      - "*.md"
+      - "scripts/build-docs.sh"
+      - "scripts/docs.css"
+      - ".github/workflows/build-docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pandoc
+        run: sudo apt-get update && sudo apt-get install -y pandoc
+
+      - name: Build HTML and PDF
+        env:
+          CHROME: google-chrome
+        run: scripts/build-docs.sh
+
+      - name: Upload docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: |
+            docs/*.html
+            docs/*.pdf
+
+      # On main, commit the regenerated files so GitHub Pages serves them.
+      - name: Commit generated docs
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898+github-actions[bot]@users.noreply.github.com"
+          git add docs
+          if git diff --cached --quiet; then
+            echo "Docs unchanged."
+          else
+            git commit -m "Rebuild docs"
+            git push
+          fi

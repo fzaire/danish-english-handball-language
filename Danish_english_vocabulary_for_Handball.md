@@ -4,7 +4,7 @@
 
 > Practise these phrases with audio and pronunciation checks in the
 > [Handball Dansk trainer](https://fzaire.github.io/danish-english-handball-language/).
-> Also available as [PDF](./Danish_for_Handball_Samuel.pdf) and [Word](./Danish_for_Handball_Samuel.docx).
+> Also available as [PDF](https://fzaire.github.io/danish-english-handball-language/docs/Danish_english_vocabulary_for_Handball.pdf) and [web page](https://fzaire.github.io/danish-english-handball-language/docs/Danish_english_vocabulary_for_Handball.html).
 
 Pronunciation hints are approximate (English-based). Danish swallows word endings and has a soft "r", so listening matters more than spelling. Danes switch to English quickly, so Samuel should say "Du må gerne tale dansk til mig" ("You may speak Danish to me") early on.
 

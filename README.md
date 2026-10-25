@@ -86,9 +86,12 @@ in the browser, then in the operating system, and reload the page.
 
 ## Project documents
 
-- [Phrasebook (Markdown)](./Danish_for_Handball_Samuel.md): readable directly on GitHub
-- [PDF phrasebook](./Danish_for_Handball_Samuel.pdf)
-- [Word phrasebook](./Danish_for_Handball_Samuel.docx)
+- [Phrasebook (Markdown)](./Danish_english_vocabulary_for_Handball.md): readable directly on GitHub.
+  Generated [web page](https://fzaire.github.io/danish-english-handball-language/docs/Danish_english_vocabulary_for_Handball.html)
+  and [PDF](https://fzaire.github.io/danish-english-handball-language/docs/Danish_english_vocabulary_for_Handball.pdf)
+  are built into [docs/](./docs) by `scripts/build-docs.sh`.
+- [Original PDF phrasebook](./Danish_for_Handball_Samuel.pdf)
+- [Original Word phrasebook](./Danish_for_Handball_Samuel.docx)
 - [Product specification](./specification.md): roadmap for future development;
   features described there are not all implemented in the current trainer.
 - [Changelog](./CHANGELOG.md): release history. When contributing, add your

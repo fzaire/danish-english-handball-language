@@ -86,6 +86,26 @@ is no build step, framework or package to install.
 4. Open <http://localhost:8000/danish-handball-trainer.html> in Chrome, Edge
    or Safari.
 
+## Building the phrasebook documents
+
+The phrasebook source is
+[Danish_english_vocabulary_for_Handball.md](./Danish_english_vocabulary_for_Handball.md).
+Edit only the Markdown; the HTML and PDF in `docs/` are generated.
+
+Requirements: [pandoc](https://pandoc.org/installing.html) and Chrome,
+Chromium or Edge.
+
+```sh
+scripts/build-docs.sh                 # build the phrasebook
+scripts/build-docs.sh other-file.md   # build specific Markdown files
+CHROME=/path/to/chrome scripts/build-docs.sh
+```
+
+Styling lives in `scripts/docs.css`. The **Build docs** GitHub Actions
+workflow runs the script on pull requests (output available as a `docs`
+artifact) and, on `main`, commits the regenerated files so GitHub Pages
+serves them.
+
 ## Coding guidelines
 
 - Keep the app a single, self-contained file that works without a server, a
